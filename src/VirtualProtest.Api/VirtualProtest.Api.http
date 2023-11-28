@@ -1,0 +1,6 @@
+@VirtualProtest.Api_HostAddress = http://localhost:5190
+
+GET {{VirtualProtest.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
