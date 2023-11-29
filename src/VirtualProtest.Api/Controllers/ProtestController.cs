@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using VirtualProtest.Core.Interfaces;
 using VirtualProtest.Core.Models;
+using VirtualProtest.Services;
 
 namespace VirtualProtest.Api.Controllers
 {
@@ -7,26 +11,41 @@ namespace VirtualProtest.Api.Controllers
     [Route("[controller]")]
     public class ProtestController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IProtestService _protestService;
 
-        private readonly ILogger<ProtestController> _logger;
-
-        public ProtestController(ILogger<ProtestController> logger)
+        public ProtestController(IProtestService protestService)
         {
-            _logger = logger;
+            _protestService = protestService;
         }
 
-        [HttpGet(Name = "GetProtest")]
-        public ProtestBase Get()
+        // GET: /protests
+        [HttpGet]
+        public ActionResult<IEnumerable<Protest>> GetProtests()
         {
-            return  new ProtestBase
+            var protests = _protestService.GetAllProtests();
+            return Ok(protests);
+        }
+
+        // POST: /protests
+        [HttpPost]
+        public ActionResult<Protest> CreateProtest([FromBody] Protest protest)
+        {
+            var createdProtest = _protestService.CreateProtest(protest);
+            return CreatedAtAction(nameof(GetProtest), new { id = createdProtest.Id }, createdProtest);
+        }
+
+        // GET: /protests/{id}
+        [HttpGet("{id}")]
+        public ActionResult<Protest> GetProtest(Guid id)
+        {
+            var protest = _protestService.GetProtestById(id);
+
+            if (protest == null)
             {
-                Date = DateTime.Now.AddDays(Random.Shared.Next(3, 24)),
-                Title = Summaries[Random.Shared.Next(Summaries.Length)]
-            };
+                return NotFound();
+            }
+
+            return Ok(protest);
         }
     }
 }

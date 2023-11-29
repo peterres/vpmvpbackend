@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VirtualProtest.Core\VirtualProtest.Core.csproj" />
+    <ProjectReference Include="..\VirtualProtest.Services\VirtualProtest.Services.csproj" />
   </ItemGroup>
 
 </Project>
