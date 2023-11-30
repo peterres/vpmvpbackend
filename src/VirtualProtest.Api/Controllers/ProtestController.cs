@@ -45,6 +45,9 @@ namespace VirtualProtest.Api.Controllers
                 return NotFound();
             }
 
+            // just send empty list for now, we will need separate view model
+            protest.Participants = new List<Participant>();
+
             return Ok(protest);
         }
     }

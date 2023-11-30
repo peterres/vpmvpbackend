@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace VirtualProtest.Core.Models
 {
@@ -14,5 +15,8 @@ namespace VirtualProtest.Core.Models
         public List<Participant> Participants { get; set; } = new List<Participant>();
 
         public int ParticipantCountActive => Participants.Count;
+
+        public bool IsActive => DateTime.UtcNow > Date.ToUniversalTime() &&
+                               DateTime.UtcNow < Date.ToUniversalTime().Add(Duration);
     }
 }
