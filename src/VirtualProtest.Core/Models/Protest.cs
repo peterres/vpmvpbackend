@@ -18,5 +18,7 @@ namespace VirtualProtest.Core.Models
 
         public bool IsActive => DateTime.UtcNow > Date.ToUniversalTime() &&
                                DateTime.UtcNow < Date.ToUniversalTime().Add(Duration);
+
+        public bool IsFinished => DateTime.UtcNow >= Date.ToUniversalTime().Add(Duration);
     }
 }
