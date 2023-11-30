@@ -46,8 +46,8 @@ namespace VirtualProtest.Services
             }
 
             // Ensuring protests is not null before adding
-            bool exists = _memoryCache.TryGetValue(ProtestCacheKey, out List<Protest>? protests);
-            if (!exists || protests == null)
+            _memoryCache.TryGetValue(ProtestCacheKey, out List<Protest>? protests);
+            if (protests == null)
             {
                 protests = new List<Protest>();
                 _memoryCache.Set(ProtestCacheKey, protests);
