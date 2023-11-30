@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace VirtualProtest.Core.Models
 {
     public class Protest
@@ -7,8 +9,10 @@ namespace VirtualProtest.Core.Models
         public string Description { get; set; } = string.Empty; // Initialized to an empty string
         public DateTime Date { get; set; } // Date and time of the protest
         public TimeSpan Duration { get; set; } // Duration of the protest
-        public int ParticipantCount { get; set; } // Current count of participants
+        public int ParticipantCountAll { get; set; } // Current count of participants
 
         public List<Participant> Participants { get; set; } = new List<Participant>();
+
+        public int ParticipantCountActive => Participants.Count;
     }
 }

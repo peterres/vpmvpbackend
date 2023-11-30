@@ -89,6 +89,7 @@ namespace VirtualProtest.Services
             if (protest != null && !protest.Participants.Any(p => p.Id == participantId))
             {
                 protest.Participants.Add(new Participant { Id = participantId });
+                protest.ParticipantCountAll++; // increase sum of all participants
                 _logger.LogInformation("Participant {ParticipantId} joined protest {ProtestId}", participantId, protestId);
             }
         }
@@ -105,16 +106,6 @@ namespace VirtualProtest.Services
                     _logger.LogInformation("Participant {ParticipantId} left protest {ProtestId}", participantId, protestId);
                 }
             }
-        }
-
-        public int GetParticipantCount(Guid protestId)
-        {
-            var protest = this.GetProtestById(protestId);
-            if (protest != null)
-            {
-                return protest.Participants.Count;
-            }
-            return 0;
         }
     }
 }

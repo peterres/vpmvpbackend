@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using VirtualProtest.Core.Models;
 
 namespace VirtualProtest.Services
 {
@@ -62,11 +64,24 @@ namespace VirtualProtest.Services
             }
         }
 
-        public async Task BroadcastParticipantCountAsync(Guid protestId, int count)
+        public async Task BroadcastParticipantCountAsync(Guid protestId, int countActive, int countAll)
         {
-            string message = $"{{\"protestId\": \"{protestId}\", \"participantCount\": {count}}}";
+            ActiveProtestMessage protestMessage = new ActiveProtestMessage()
+            {
+                ProtestId = protestId.ToString(),
+                ParticipantCountActive = countActive,
+                ParticipantCountAll = countAll
+            };
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            string message = JsonSerializer.Serialize(protestMessage, options);
+
             await BroadcastMessageAsync(message);
-            _logger.LogInformation("Broadcasting participant count. Protest ID: {ProtestId}, Count: {Count}", protestId, count);
+            _logger.LogInformation("Broadcasting protest update message. Protest ID: {ProtestId}, Message: {Message}", protestId, message);
         }
     }
 }

@@ -11,6 +11,5 @@ namespace VirtualProtest.Core.Interfaces
         Protest? GetProtestById(Guid id);
         void JoinProtest(Guid protestId, string participantId);
         void LeaveProtest(Guid protestId, string participantId);
-        int GetParticipantCount(Guid protestId);
     }
 }

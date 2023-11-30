@@ -47,8 +47,8 @@ namespace VirtualProtest.Api.Controllers
             _logger.LogInformation("Handling WebSocket connection for protest ID: {ProtestId}", protestId);
 
             // Broadcast the updated participant count
-            var updatedCountStart = _protestService.GetParticipantCount(protestId);
-            await _webSocketManager.BroadcastParticipantCountAsync(protestId, updatedCountStart);
+            var protestStart = _protestService.GetProtestById(protestId);
+            await _webSocketManager.BroadcastParticipantCountAsync(protestId, protestStart?.ParticipantCountActive ?? 0, protestStart?.ParticipantCountAll ?? 0);
 
             // Handle the WebSocket connection here
             while (webSocket.State == WebSocketState.Open)
@@ -71,8 +71,8 @@ namespace VirtualProtest.Api.Controllers
             _protestService.LeaveProtest(protestId, participantId); // Handle participant leaving the protest
 
             // Broadcast the updated participant count
-            var updatedCountEnd = _protestService.GetParticipantCount(protestId);
-            await _webSocketManager.BroadcastParticipantCountAsync(protestId, updatedCountEnd);
+            var protestEnd = _protestService.GetProtestById(protestId);
+            await _webSocketManager.BroadcastParticipantCountAsync(protestId, protestEnd?.ParticipantCountActive ?? 0, protestEnd?.ParticipantCountAll ?? 0);
 
             _logger.LogInformation("WebSocket connection closed for protest ID: {ProtestId}, Participant ID: {ParticipantId}", protestId, participantId);
         }
