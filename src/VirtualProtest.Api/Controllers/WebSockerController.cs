@@ -53,16 +53,13 @@ namespace VirtualProtest.Api.Controllers
             // Handle the WebSocket connection here
             while (webSocket.State == WebSocketState.Open)
             {
-                // WebSocket handling logic
-                // ...
+                var buffer = new byte[1024 * 4];
+                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
-                // TODO: Is this useful in anyway?
-                await Task.Delay(100);
-
-                // Check for closed connection
-                if (webSocket.State != WebSocketState.Open)
+                if (result.MessageType == WebSocketMessageType.Close)
                 {
-                    break; // Exit the loop if the connection is closed
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    break;
                 }
             }
 
